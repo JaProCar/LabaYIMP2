@@ -28,5 +28,19 @@ public:
     friend ostream& operator<<(ostream& os, const routes& Routes);
     friend istream& operator>>(istream& is, const routes& Routes);
 };
-//войды я пропишу
+
+void display(string a);
+void searchJET();
+void searchROU();
+void addJET();
+void addROU();
+void delJET();
+void delROU();
+void vylet();
+void time();
+void array(int i, string f_name, routes*arr);
+void array(int i, string f_name, jets*arr);
+int arr_s(string f_name);
+void fatal();
+void chek(string a);
 }
