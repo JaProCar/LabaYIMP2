@@ -274,3 +274,55 @@ void nm::vylet(){
         }
     fwrite.close();
 }
+
+
+void nm::time(){
+    int j = arr_s("routes.txt");
+    routes arr1[j];
+    array(j,"routes.txt", arr1);
+
+    int i = arr_s("jets.txt");
+    jets arr[i];
+    array(i,"jets.txt", arr);
+
+
+    cout<<"Введите время, проведенное в пути"<<endl;
+    int t;
+    if (!(cin >> t)||(t<=0)) {
+            cout << "Ошибка при вводе скорости" <<endl; 
+            return;}
+
+    ofstream fwrite;
+    fwrite.open("jets.txt");
+    if(!fwrite.is_open()) fatal();
+        for(int n = 0; n < i; n++){
+            if(arr[n].status!=0){
+            for(int m = 0; m < j; m++){
+                if(arr[n].range==arr1[m].name){
+            
+        int c, c1, _x, _y, _l;
+        _x = arr1[m].endX-arr1[m].startX;
+        _y = arr1[m].endY-arr1[m].startY;
+        c=sqrt(pow(_x,2)+pow(_y,2));//длина всего пути/направляющ вектора
+        c1=t*arr[n].speed; //пройден путь за время
+        int _t=c/arr[n].speed;//требуемое время
+        arr[n].time= arr[n].time+t;
+        arr[n].timeEnd=_t-t;
+        arr[n].x=_x*c1/c;
+        arr[n].y=_y*c1/c;
+        if(arr[n].time<=0){
+            cout<<"Самолет "<< arr[n].model <<" прибыл в пункт назначения"<<endl;
+            arr[n].time=0;
+            arr[n].status=0;
+            arr[n].timeEnd=0;
+            arr[n].x=0;
+            arr[n].y=0;
+            arr[n].range="No";
+        }
+            }}
+            fwrite << arr[n].model << arr[n].pilot << " " << arr[n].range << " " << arr[n].speed << " " << arr[n].status<< " " << arr[n].time<<" "<< arr[n].x<<" "<<arr[n].y<<" "<<arr[n].timeEnd<< endl;
+            
+        }   
+        fwrite.close();
+}
+}
