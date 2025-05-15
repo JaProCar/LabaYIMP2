@@ -1,3 +1,9 @@
+#include <fstream>
+#include "Z.h"
+#include <math.h>
+
+using namespace std;
+
 ostream& operator<<(ostream& os, const nm::jets& Jets){
     os << Jets.model <<" "<< Jets.pilot << " " << Jets.range << " " << Jets.speed<< " "<<Jets.status<< " " <<Jets.time<<" "<< Jets.x<<" "<< Jets.y<<" "<< Jets.timeEnd;
     return os;
@@ -75,6 +81,8 @@ void nm::addJET(){
     cout << "Введите скорость самолета" << endl;
     if (!(cin >> editable.speed)||(editable.speed<=0)) {
                 cout << "Ошибка при вводе скорости" <<endl;
+                cin.clear(); 
+                cin.ignore(1000, '\n');
             return;}
     fstream f;
     editable.range = "no";
@@ -96,9 +104,17 @@ void nm::delJET(){
 
     int index;
     cout << "Введите индекс самолета" << endl;
-    if (!(cin >> index)||(index<0)||(index>i)){
+    if (!(cin >> index)){
         cout<<"Некорректный ввод"<<endl;
+        cin.clear(); 
+        cin.ignore(1000, '\n');
         return;
+    }
+    else{
+        if((index<0)||(index>i)){
+            cout<<"Такого самолета нет"<<endl;
+            return;
+        }
     }
     ofstream fwrite;
     fwrite.open("jets.txt");
@@ -145,21 +161,33 @@ void nm::addROU(){
     cout << "Введите координату начала по х" << endl;
     if (!(cin >> editable.startX)){
         cout<<"Некорректный ввод"<<endl;
+        cin.clear(); 
+        cin.ignore(1000, '\n');
         return;
     }
     cout << "Введите координату начала по у" << endl;
     if (!(cin >> editable.startY)){
         cout<<"Некорректный ввод"<<endl;
+        cin.clear(); 
+        cin.ignore(1000, '\n');
         return;
     }
     cout << "Введите координату конца по х" << endl;
     if (!(cin >> editable.endX)){
         cout<<"Некорректный ввод"<<endl;
+        cin.clear(); 
+        cin.ignore(1000, '\n');
         return;
     }
     cout << "Введите координату конца по у" << endl;
     if (!(cin >> editable.endY)){
         cout<<"Некорректный ввод"<<endl;
+        cin.clear(); 
+        cin.ignore(1000, '\n');
+        return;
+    }
+    if ((editable.startX ==editable.endX)&& (editable.startY ==editable.endY)){
+        cout<<"Маршрут не может начинаться и заканчиваться в 1 точке"<<endl;
         return;
     }
     fstream f;
@@ -176,10 +204,17 @@ void nm::delROU(){
 
     int index;
     cout << "Введите индекс маршрута" << endl;
-    if (!(cin >> index)||(index<0)||(index>i)){
+    if (!(cin >> index)){
         cout<<"Некорректный ввод"<<endl;
-        return;
-    }
+        cin.clear(); 
+        cin.ignore(1000, '\n');
+        return;}
+        else{
+            if((index<0)||(index>i)){
+                cout << "Такого маршрута нет" << endl;
+                return;
+            }
+        }
     ofstream fwrite;
     fwrite.open("routes.txt");
     if(!fwrite.is_open()) fatal();
@@ -243,16 +278,32 @@ void nm::vylet(){
 
     cout<< "Введите индекс желаемого маршрута для вылета"<<endl;
     int a;
-    if (!(cin >> a)||(a<0)||(a>j)) {
-            cout << "Данного маршрута не существует" <<endl;
+    if (!(cin >> a)) {
+            cout << "Ошибка ввода" <<endl;
+            cin.clear(); 
+            cin.ignore(1000, '\n');
             return;
+        }
+        else{
+            if((a<0)||(a>j)){
+                cout<<"Такого маршрута нет"<<endl;
+                return;
+            }
         }
 
     cout<<"Введите индекс свободного самолета, отправляемого в путь"<<endl;
     int index;
-    if (!(cin >> index)||(index<0)||(index>i)) {
-            cout << "Данного самолета не существует" <<endl;
+    if (!(cin >> index)) {
+            cout << "Ошибка ввода" <<endl;
+            cin.clear(); 
+            cin.ignore(1000, '\n');
             return;
+        }
+        else{
+            if((index<0)||(index>i)){
+                cout<<"Такого самолета нет"<<endl;
+                return;
+            }
         }
     if(arr[index].status) {
     cout<< "Данный самолет уже находится в рейсе" <<endl;
@@ -290,6 +341,8 @@ void nm::time(){
     int t;
     if (!(cin >> t)||(t<=0)) {
             cout << "Ошибка при вводе скорости" <<endl; 
+            cin.clear(); 
+            cin.ignore(1000, '\n');
             return;}
 
     ofstream fwrite;
