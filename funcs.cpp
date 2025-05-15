@@ -190,3 +190,87 @@ void nm::delROU(){
     }
     fwrite.close();
 }
+int nm::arr_s(string f_name){
+        string line;
+    int i = 0;
+    ifstream fread;
+    fread.open(f_name);
+    if(!fread.is_open()) fatal();
+    while(getline(fread, line)){
+        i++;
+    }
+    fread.close();
+    return i;
+}
+
+void nm::array(int i, string f_name, routes*arr){
+    ifstream fread;
+    fread.open(f_name);
+    if(!fread.is_open()) fatal();
+    routes editable;
+    for(int n = 0; n < i; n++){
+        fread >> editable;
+        arr[n] = editable;
+    }
+    fread.close();
+
+}
+
+void nm::array(int i, string f_name, jets*arr){
+    ifstream fread;
+    fread.open(f_name);
+    if(!fread.is_open()) fatal();
+    jets editable;
+    for(int n = 0; n < i; n++){
+        fread >> editable;
+        arr[n] = editable;
+    }
+    fread.close();
+
+}
+void nm::fatal(){
+        cout<< "Ошибка открытия файла. Программа будет завершена"<<endl;
+        exit(EXIT_FAILURE);}
+
+void nm::vylet(){
+    int j = arr_s("routes.txt");
+    routes arr1[j];
+    array(j,"routes.txt", arr1);
+
+    int i = arr_s("jets.txt");
+    jets arr[i];
+    array(i,"jets.txt", arr);
+
+    cout<< "Введите индекс желаемого маршрута для вылета"<<endl;
+    int a;
+    if (!(cin >> a)||(a<0)||(a>j)) {
+            cout << "Данного маршрута не существует" <<endl;
+            return;
+        }
+
+    cout<<"Введите индекс свободного самолета, отправляемого в путь"<<endl;
+    int index;
+    if (!(cin >> index)||(index<0)||(index>i)) {
+            cout << "Данного самолета не существует" <<endl;
+            return;
+        }
+    if(arr[index].status) {
+    cout<< "Данный самолет уже находится в рейсе" <<endl;
+    return;
+    }
+    else {
+        arr[index].status=1;
+        arr[index].range=arr1[a].name;
+        arr[index].x=arr1[a].startX;
+        arr[index].y=arr1[a].startY;
+        int c=sqrt(pow(arr1[a].startX-arr1[a].endX,2)+pow(arr1[a].startY-arr1[a].endY,2));
+        arr[index].timeEnd= c/arr[index].speed;
+    }
+    ofstream fwrite;
+    fwrite.open("jets.txt");
+    if(!fwrite.is_open()) fatal();
+    for(int n = 0; n < i; n++){
+            fwrite << arr[n].model << " " << arr[n].pilot << " " << arr[n].range << " " << arr[n].speed << " " << arr[n].status<< " " << arr[n].time<<" "<< arr[n].x<<" "<<arr[n].y<<" "<<arr[n].timeEnd<< endl;
+        }
+    fwrite.close();
+}
